@@ -1,7 +1,4 @@
-# JenkinsPipeline
 ## Build Docker Image Using Jenkins Pipeline & Push to AWS ECR
-
-
 
 
 
@@ -11,37 +8,11 @@
 
 
 
-```
-https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS/
-
-https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basic.html
-```
-
-
-
-```
-https://learn.sandipdas.in/2021/06/03/build-docker-image-using-jenkins-pipeline/
-```
-
-![image-20220524121523567](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220524121523567.png)
-
-
-
-
-
 
 
 #### **Configuring the System & Environment**
 
 **Step 1:** First Let's install Jenkins, in this tutorial we are using AWS Linux AMI 2, and for that is are the installations steps documentation:
-
-https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS
-
-Install Docker:
-
-https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html
-
-
 
 #### `Download and install Jenkins`
 
@@ -122,6 +93,24 @@ Jenkins is now installed and running on your EC2 instance. To configure Jenkins:
 
 - Once the installation is complete, **Create First Admin User**, click **Save and Continue**.
 
+  ![image-20220525113841662](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525113841662.png)
+
+  ![image-20220525113920071](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525113920071.png)
+
+- On the left-hand side, click **Manage Jenkins**, and then click **Manage Plugins**.
+
+  ![image-20220525114224097](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525114224097.png)
+
+  
+
+- Click on the **Available** tab, and then enter **Amazon EC2 plugin** at the top right.
+
+- Select the check box next to **Amazon EC2 plugin**, and then click **Install without restart**.
+
+  ![image-20220525114313105](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525114313105.png)
+
+  
+
 - Click **Add a new cloud**, and select **Amazon EC2**. A collection of new fields appears.
 
 - Fill out all the fields. (Note: You will have to Add Credentials of the kind AWS Credentials.)
@@ -172,19 +161,15 @@ After completing this tutorial, be sure to delete the AWS resources that you cre
 
 8. Verify that you can run Docker commands without `sudo`.
 
-   ```
-   docker info
+   ```bash
+   sudo docker info
    ```
 
    
 
-
-
-
-
 **Step 2:** **Add Jenkins user to Docker group**
 
-```
+```bash
 sudo usermod -a -G docker jenkins
 ```
 
@@ -192,7 +177,7 @@ sudo usermod -a -G docker jenkins
 
 **Step 3:** **Restart Jenkins service**
 
-```
+```bash
 sudo service jenkins restart
 ```
 
@@ -200,7 +185,7 @@ sudo service jenkins restart
 
 **Step 4:** **Reload system daemon**
 
-```
+```bash
 sudo systemctl daemon-reload
 ```
 
@@ -208,7 +193,7 @@ sudo systemctl daemon-reload
 
 **Step 5:** **Restart Docker service**
 
-```
+```bash
 sudo service docker restart
 ```
 
@@ -219,23 +204,57 @@ sudo service docker restart
 1. Docker plug-in 
 2. Docker pipeline plug-in
 
-```
-yum install git
+```bash
+sudo yum install -y git
 ```
 
 
 
 **Step 7:** **Create AWS ECR Repo in AWS**
 
+![image-20220525115020439](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525115020439.png)
+
 
 
 **Step 8:** **Create IAM role and** With `AmazonEC2ContainerRegistryFullAccess` policy and **attach with the Jenkins EC2 Instance**
+
+![image-20220525114946608](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525114946608.png)
+
+
+
+![image-20220525115147399](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525115147399.png)
+
+![image-20220525115214437](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525115214437.png)
 
 
 
 **Creating Jenkins Pipeline**
 
 **Step 1 – Create a pipeline in Jenkins, with your project name**
+
+![image-20220525115532652](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525115532652.png)
+
+![image-20220525115601722](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525115601722.png)
+
+
+
+![image-20220525115615580](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525115615580.png)
+
+
+
+`click on Pipeline Syntx`
+
+![image-20220525120047689](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525120047689.png)
+
+
+
+`Generate Pipeline Script`
+
+![image-20220525120107996](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525120107996.png)
+
+
+
+
 
 **Step 2: Use below pipeline code**
 
@@ -303,98 +322,12 @@ pipeline {
 
 **Step 3:** Click on Build to see build happening properly and Docker image getting published to AWS ECR
 
+![image-20220525120459500](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525120459500.png)
 
 
 
+![image-20220525120405062](C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20220525120405062.png)
 
 
 
-
-
-`To install Docker on an Amazon EC2 instance`
-
-```bash
-sudo yum update -y
-sudo amazon-linux-extras install docker
-sudo service docker start
-sudo usermod -a -G docker ec2-user
-sudo service docker status
-sudo docker info
-
-# add jenkins user to Docker group
-sudo usermod -a -G docker jenkins
-sudo systemctl jenkins restart
-sudo systemctl daemon-reload
-sudo service docker restart
-```
-
-
-
-`install git`
-
-```
-sudo yum install -y git
-```
-
-
-
-
-
-```
-pipeline {
-    agent any
-    environment {
-        AWS_ACCOUNT_ID="YOUR_ACCOUNT_ID_HERE"
-        AWS_DEFAULT_REGION="CREATED_AWS_ECR_CONTAINER_REPO_REGION" 
-        IMAGE_REPO_NAME="ECR_REPO_NAME"
-        IMAGE_TAG="IMAGE_TAG"
-        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
-    }
-   
-    stages {
-        
-         stage('Logging into AWS ECR') {
-            steps {
-                script {
-                sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-                }
-                 
-            }
-        }
-        
-        stage('Cloning Git') {
-            steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/sd031/aws_codebuild_codedeploy_nodeJs_demo.git']]])     
-            }
-        }
-  
-    // Building Docker images
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
-        }
-      }
-    }
-   
-    // Uploading Docker images into AWS ECR
-    stage('Pushing to ECR') {
-     steps{  
-         script {
-                sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"
-                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}"
-         }
-        }
-      }
-    }
-}
-```
-
-
-
-
-
-```
-aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 867485879935.dkr.ecr.ap-south-1.amazonaws.com
-```
 
