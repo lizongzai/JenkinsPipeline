@@ -14,6 +14,12 @@
 
 **Step 1:** First Let's install Jenkins, in this tutorial we are using AWS Linux AMI 2, and for that is are the installations steps documentation:
 
+https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS
+
+Install Docker:
+
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html
+
 #### `Download and install Jenkins`
 
 ##### To download and install Jenkins:
